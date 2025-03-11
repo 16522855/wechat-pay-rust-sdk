@@ -1,10 +1,10 @@
 [package]
-name = "wechat-pay-rust-sdk"
-version = "0.2.18"
+name = "wechat-pay-rust-sdk-gs"
+version = "0.2.19"
 edition = "2021"
 authors = ["lake"]
 description = "微信支付 © Wechat Pay SDK Official (标准库)"
-repository = "https://github.com/dounine/wechat-pay-rust-sdk"
+repository = "https://github.com/16522855/wechat-pay-rust-sdk"
 license = "MIT"
 keywords = ["wechat", "pay", "weixin", "wechatpay", "weixinpay"]
 exclude = ["example"]
