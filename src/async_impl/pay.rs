@@ -53,6 +53,38 @@ impl WechatPay {
             .map(Ok)?
     }
 
+    pub async fn request<P: ParamsTrait, R: ResponseTrait>(
+        &self,
+        method: HttpMethod,
+        url: &str,
+        json: P,
+    ) -> Result<R, PayError> {
+        let json_str = json.to_json();
+        debug!("json_str: {}", json_str);
+        let mut map: Map<String, Value> = serde_json::from_str(&json_str)?;
+        let body = serde_json::to_string(&map)?;
+        let headers = self.build_header(method.clone(), url, body.as_str())?;
+        let client = reqwest::Client::new();
+        let url = format!("{}{}", self.base_url(), url);
+        debug!("url: {} body: {}", url, body);
+        let builder = match method {
+            HttpMethod::GET => client.get(url),
+            HttpMethod::POST => client.post(url),
+            HttpMethod::PUT => client.put(url),
+            HttpMethod::DELETE => client.delete(url),
+            HttpMethod::PATCH => client.patch(url),
+        };
+
+        builder
+            .headers(headers)
+            .body(body)
+            .send()
+            .await?
+            .json::<R>()
+            .await
+            .map(Ok)?
+    }
+
     pub async fn get_pay<R: ResponseTrait>(&self, url: &str) -> Result<R, PayError> {
         let body = "";
         let headers = self.build_header(HttpMethod::GET, url, body)?;
