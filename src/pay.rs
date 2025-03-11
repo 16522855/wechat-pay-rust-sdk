@@ -215,7 +215,7 @@ impl WechatPay {
         Self::new(appid, mch_id, private_key, serial_no, v3_key, notify_url)
     }
 
-    pub(crate) fn build_header(
+    pub fn build_header(
         &self,
         method: HttpMethod,
         url: impl AsRef<str>,
